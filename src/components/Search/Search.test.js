@@ -1,14 +1,12 @@
 import { render, screen } from '@testing-library/react'
-import App from './App'
+import Search from './Search'
 
-test('renders search component', () => {
-  render(<App />)
-  const searchComponent = screen.getByPlaceholderText(/search the moviedb/i)
-  expect(searchComponent).toBeInTheDocument()
+test('search component empty test', () => {
+  expect(true).toBeTruthy()
 })
 
-test('renders page title', () => {
-  render(<App />)
-  const titleElement = screen.getByText(/Movieligent/i)
-  expect(titleElement).toBeInTheDocument()
+test('renders search component', () => {
+  render(<Search />)
+  const searchComponent = screen.getByPlaceholderText(/search the moviedb/i)
+  expect(searchComponent).toBeInTheDocument()
 })
