@@ -31,6 +31,7 @@ function App() {
       <Search handleSearch={handleSearch} />
       { searchTerm && <Results searchTerm={searchTerm} handleFavorite={handleFavorite} favorites={favorites} /> }
       <Favorites handleFavorite={handleFavorite} favorites={favorites} />
+      <a href='https://github.com/richee85/movieligent' className='flex justify-center mt-8'>https://github.com/richee85/movieligent</a>
     </div>
   )
 }
