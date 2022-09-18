@@ -2,7 +2,7 @@ import React from 'react'
 
 const Favorites = ({favorites, handleFavorite}) => {
   return (
-    <div className='overflow-x-auto relative px-6'>
+    <div className='overflow-x-auto relative p-6'>
       <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
         <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
           <tr>
@@ -38,7 +38,7 @@ const Favorites = ({favorites, handleFavorite}) => {
               <td className='py-4 px-6'>
                 {item.vote_average}
               </td>
-              <td className='py-4 px-6' onClick={() => handleFavorite(item)}>
+              <td className='py-4 px-6 hover:cursor-pointer' onClick={() => handleFavorite(item)}>
                 {favorites.includes(item) ? 'Remove from favorites' : 'Add to favorites'}
               </td>
             </tr>
