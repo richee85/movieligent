@@ -1,8 +1,18 @@
 kind: pipeline
+name: default
 
 steps:
-  - name: build
-    image: node
+  - name: run-tests
+    image: node:10.16.0
     commands:
-      - npm install
-      - npm test
+      - npm run build
+      - npm run test
+    when:
+      status:
+        - failure
+        - success
+      event:
+        - pull_request
+      branch:
+        - master
+        - "*:master"
