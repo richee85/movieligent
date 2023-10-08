@@ -2,9 +2,9 @@ const Search = ({ handleSearch }) => {
   let searchTerm
   function handleInputChange (evt) {
     searchTerm = evt.target.value
-    if (searchTerm.length >= 3) {
+    /* if (searchTerm.length >= 3) {
       handleSearch(searchTerm)
-    }
+    } */
   }
 
   function handleKeyDown (evt) {

@@ -9,6 +9,6 @@ test('renders search component', () => {
 
 test('renders page title', () => {
   render(<App />)
-  const titleElement = screen.getByText(/Movieligent/i)
+  const titleElement = screen.getByText(/movie-ligent/i)
   expect(titleElement).toBeInTheDocument()
 })

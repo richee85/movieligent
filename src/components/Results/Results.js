@@ -3,12 +3,12 @@ import useSWR from 'swr'
 
 import Pagination from '../Pagination/Pagination'
 
-const Results = ({ searchTerm, handleFavorite, favorites }) => {
+const Results = ({ searchTerm/* , handleFavorite, favorites */ }) => {
   const fetcher = (url) => fetch(url).then((r) => r.json())
   const [pageNumber, setPageNumber] = useState(1)
 
   let pages = 0
-  const { data, error } = useSWR(getUrl(pageNumber, searchTerm), fetcher)
+  const { data, isLoading, error } = useSWR(getUrl(searchTerm, pageNumber), fetcher)
 
   function handlePageChange(pageNo) {
     if (pageNo < 1 || pageNo > pages) {
@@ -17,24 +17,42 @@ const Results = ({ searchTerm, handleFavorite, favorites }) => {
     setPageNumber(pageNo)
   }
 
-  function getUrl(pageNumber, searchTerm) {
-    return `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}&language=en-US&page=${pageNumber}&include_adult=false&query=${searchTerm}`
+  function getUrl(searchTerm, pageNumber = 0) {
+    return `http://localhost:3001/cache/${searchTerm}/${pageNumber}`;
+    // return `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}&language=en-US&page=${pageNumber}&include_adult=false&query=${searchTerm}`
+  }
+
+  if (isLoading) {
+    return (
+      <div
+        class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+        role="status">
+        <span
+          class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+          >Loading...</span
+        >
+      </div>
+    )
   }
 
   if (error) {
+    console.error(error)
     return (
       <div className='mx-6 p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800' role='alert'>
-        <span className='font-medium'>What have you done?!</span>
+        <span className='font-medium'>The teapot failed...</span>
       </div>
     )
-  } else if (data && data.results.length) {
+  } else if (data?.results.length) {
     pages = data.total_pages
     return (
       <>
         <div className='overflow-x-auto relative p-6'>
-          <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
+          <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400 rounded-lg'>
             <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
               <tr>
+                <th scope='col' className='py-3 px-6'>
+                  Poster
+                </th>
                 <th scope='col' className='py-3 px-6'>
                   Title
                 </th>
@@ -47,19 +65,22 @@ const Results = ({ searchTerm, handleFavorite, favorites }) => {
                 <th scope='col' className='py-3 px-6'>
                   Vote Average
                 </th>
-                <th scope='col' className='py-3 px-6'>
+                {/* <th scope='col' className='py-3 px-6'>
                   Favorite
-                </th>
+                </th> */}
               </tr>
             </thead>
             <tbody>
               {data.results.map(item => (
                 <tr className='bg-white border-b dark:bg-gray-800 dark:border-gray-700' key={item.id}>
+                  <th scope='row' className='py-4 px-6 fron-medium text-gray-900 whitespace-nowrap dark:text-white'>
+                    { item.poster_path && <img alt={item.title} src={'https://image.tmdb.org/t/p/original/' + item.poster_path} className='max-h-16' /> }
+                  </th>
                   <th scope='row' className='py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white'>
                     {item.title}
                   </th>
                   <td className='py-4 px-6'>
-                    {item.release_date}
+                    {item.release_date ? item.release_date : 'TBD'}
                   </td>
                   <td className='py-4 px-6'>
                     {item.id}
@@ -67,9 +88,9 @@ const Results = ({ searchTerm, handleFavorite, favorites }) => {
                   <td className='py-4 px-6'>
                     {item.vote_average}
                   </td>
-                  <td className='py-4 px-6 hover:cursor-pointer' onClick={ () => handleFavorite(item) }>
+                  {/* <td className='py-4 px-6 hover:cursor-pointer' onClick={ () => handleFavorite(item) }>
                     { favorites.includes(item) ? 'Remove from favorites' : 'Add to favorites' }
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>
